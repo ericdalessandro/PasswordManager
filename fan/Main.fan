@@ -34,9 +34,7 @@ class Main {
 				echo("\n")
 			}else if(str.equals("4")){
 				// Set or change master
-				echo("Enter new master password")
-				master := Env.cur.in.readLine
-				passwordManager.SetMaster(master)
+				passwordManager.SetMaster()
 				echo("\n")
 			}else{
 				echo("Invalid input")

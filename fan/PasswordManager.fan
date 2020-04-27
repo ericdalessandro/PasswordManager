@@ -76,26 +76,39 @@ class PasswordManager {
 	/**
 	* Sets a master password if one does not exist, or overrides the old one if one does exist.
 	*/
-	Void SetMaster(Str master){
+	Void SetMaster(){
 		file := this.filepath.toFile
 		if(customMaster){
-			List allPasswords := Str[,]
-			file.eachLine |line| {
-				if(!line.toCode.contains(MASTER_DEFAULT_NAME)){
-					allPasswords.add(line.toCode)
+			echo("Enter current master password")
+			str := Env.cur.in.readLine
+			if(str.equals(masterPassword)){
+				echo("Enter new master password")
+				master := Env.cur.in.readLine
+				List allPasswords := Str[,]
+				file.eachLine |line| {
+					if(!line.toCode.contains(MASTER_DEFAULT_NAME)){
+						allPasswords.add(line.toCode)
+					}
 				}
+				//TODO Fix the out statements
+				file.out(true).printLine(MASTER_DEFAULT_NAME + "," + master)	// I have no idea why this won't actually add anything to the file.
+				allPasswords.each |Str s| {
+					file.out(true).printLine(s) // I have no idea why this won't actually add anything to the file.
+					//echo(s)
+				}
+				masterPassword = master
 			}
-			//TODO Fix the out statements
-			file.out(true).printLine(MASTER_DEFAULT_NAME + "," + master)	// I have no idea why this won't actually add anything to the file.
-			allPasswords.each |Str s| {
-				file.out(true).printLine(s) // I have no idea why this won't actually add anything to the file.
-				//echo(s)
+			else{
+				echo("Password Incorrect")
+				return
 			}
 		}else{
+			echo("Enter new master password")
+			master := Env.cur.in.readLine
 			file.out(true).printLine(MASTER_DEFAULT_NAME + "," + master) // I have no idea why this won't actually add anything to the file.
 			customMaster = true
+			masterPassword = master
 		}
-		masterPassword = master
 	}
 	
 	/**
